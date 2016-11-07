@@ -13,3 +13,7 @@ All of the notes that are used I found from https://www.freesound.org/people/job
 
 All of the images that you see I created myself in http://www.picmonkey.com
 
+## Note
+
+To play the piano through keys on the keyboard, Z - M are the first octave white keys, and holding shift while pressing Z - M will play the second octave white keys. In the row of keys A - L, the keys that fall in between the "white" keys where the "black" keys would normally be are the sharp and flat keys. For example, because the key Z is the note C, the key S is the note C#.
+
