@@ -8,7 +8,7 @@ This used to work in both Python 2 AND 3, but since then, the `simpleaudio` modu
 
 ## Getting Started
 
-1. `cd /src`
+1. `cd src`
 2. `pip3 install simpleaudio`
 3. `python3 piano.py`
 
