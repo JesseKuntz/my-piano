@@ -2,7 +2,7 @@
   Python Piano
 </h1>
 
-### [👉 Full Project Description 👈](https://jessekuntz.github.io/?project=python-piano)
+### [👉 Full Project Description 👈](https://jessekuntz.github.io/python-piano.html)
 
 ## Running Things
 
