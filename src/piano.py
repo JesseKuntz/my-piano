@@ -17,16 +17,22 @@ try:
 except ImportError:
     from tkinter import Tk, Frame, BOTH, Label, PhotoImage
 # Import the package that allows me to play sounds.
-import simpleaudio as sa
+import subprocess
 # Import the package that allows me to keep track of time.
 import time as t
 # Import the package that allows me to concurrently run operations.
 from _thread import start_new_thread
+import os
+
+SRC_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def src_path(relative):
+    return os.path.join(SRC_DIR, relative)
 
 start = t.time()
 
 # These two lines wipe the file.
-file = open('songs/song.txt', 'w')
+file = open(src_path('songs/song.txt'), 'w')
 file.close()
 
 recording = False
@@ -43,13 +49,13 @@ recording = False
 ##########################################################
 def label_pressed(event):
     if len(event.widget.name) == 2:
-        img = 'pictures/white_key_pressed.gif'
+        img = src_path('pictures/white_key_pressed.gif')
     elif len(event.widget.name) == 3:
-        img = 'pictures/black_key_pressed.gif'
+        img = src_path('pictures/black_key_pressed.gif')
     elif event.widget.name == 'red_button':
-        img = 'pictures/red_button_pressed.gif'
+        img = src_path('pictures/red_button_pressed.gif')
     else:
-        img = 'pictures/green_button_pressed.gif'
+        img = src_path('pictures/green_button_pressed.gif')
     key_img = PhotoImage(file=img)
     event.widget.configure(image=key_img)
     event.widget.image = key_img
@@ -66,13 +72,13 @@ def label_pressed(event):
 ##########################################################
 def label_released(event):
     if len(event.widget.name) == 2:
-        img = 'pictures/white_key.gif'
+        img = src_path('pictures/white_key.gif')
     elif len(event.widget.name) == 3:
-        img = 'pictures/black_key.gif'
+        img = src_path('pictures/black_key.gif')
     elif event.widget.name == 'red_button':
-        img = 'pictures/red_button.gif'
+        img = src_path('pictures/red_button.gif')
     else:
-        img = 'pictures/green_button.gif'
+        img = src_path('pictures/green_button.gif')
     key_img = PhotoImage(file=img)
     event.widget.configure(image=key_img)
     event.widget.image = key_img
@@ -89,21 +95,19 @@ def label_released(event):
 # played.                                                #
 ##########################################################
 def play(file_name):
-    song_file = open(file_name, 'r')
+    song_file = open(src_path(file_name), 'r')
     print("Playback Started")
     first_line = song_file.readline().split()
     note = first_line[0]
     time_scale = float(first_line[1])
     for line in song_file:
-        wave_obj = sa.WaveObject.from_wave_file('sounds/' + note + '.wav')
-        wave_obj.play()
+        subprocess.Popen(['afplay', src_path('sounds/' + note + '.wav')])
         line_elements = line.split()
         note = line_elements[0]
         time = float(line_elements[1])
         t.sleep(time - time_scale)
         time_scale = time
-    wave_obj = sa.WaveObject.from_wave_file('sounds/' + note + '.wav')
-    wave_obj.play()
+    subprocess.Popen(['afplay', src_path('sounds/' + note + '.wav')])
     print("Playback Stopped")
 
 
@@ -156,7 +160,7 @@ def record_on_off(event):
 # the file.                                              #
 ##########################################################
 def record(file_name, note):
-    song_file = open(file_name, 'a')
+    song_file = open(src_path(file_name), 'a')
     end = t.time()
     time = end - start
     song_file.write(note + ' ' + str(time))
@@ -195,15 +199,14 @@ def key_pressed(event):
     # is pressed, it will not return an error.
     note = KEYS_TO_NOTES.get(event.char, None)
     if note:
-        wave_obj = sa.WaveObject.from_wave_file('sounds/' + note + '.wav')
-        wave_obj.play()
+        subprocess.Popen(['afplay', src_path('sounds/' + note + '.wav')])
         print(note)
         if recording:
             record('songs/song.txt', note)
         if len(note) == 2:
-            img = 'pictures/white_key_pressed.gif'
+            img = src_path('pictures/white_key_pressed.gif')
         else:
-            img = 'pictures/black_key_pressed.gif'
+            img = src_path('pictures/black_key_pressed.gif')
         key_img = PhotoImage(file=img)
         find_label(note, event.widget.keys).configure(image=key_img)
         find_label(note, event.widget.keys).image = key_img
@@ -222,9 +225,9 @@ def key_released(event):
     note = KEYS_TO_NOTES.get(event.char, None)
     if note:
         if len(note) == 2:
-            img = 'pictures/white_key.gif'
+            img = src_path('pictures/white_key.gif')
         else:
-            img = 'pictures/black_key.gif'
+            img = src_path('pictures/black_key.gif')
         key_img = PhotoImage(file=img)
         find_label(note, event.widget.keys).configure(image=key_img)
         find_label(note, event.widget.keys).image = key_img
@@ -241,8 +244,7 @@ def key_released(event):
 # Label that is clicked.                                 #
 ##########################################################
 def button_pressed(event):
-    wave_obj = sa.WaveObject.from_wave_file('sounds/' + event.widget.name + '.wav')
-    wave_obj.play()
+    subprocess.Popen(['afplay', src_path('sounds/' + event.widget.name + '.wav')])
     print(event.widget.name)
     if recording:
         record('songs/song.txt', event.widget.name)
@@ -351,18 +353,18 @@ class Piano(Frame):
         # and appends a Label to each slot in keys.
         for key in keys:
             if len(key[1]) == 2:
-                img = 'pictures/white_key.gif'
+                img = src_path('pictures/white_key.gif')
                 key.append(self.create_key(img, key))
 
         # This for loop populates the window with the black key Labels
         # and appends a Label to each slot in keys.
         for key in keys:
             if len(key[1]) > 2:
-                img = 'pictures/black_key.gif'
+                img = src_path('pictures/black_key.gif')
                 key.append(self.create_key(img, key))
 
         # This group of lines creates the record Label.
-        img = PhotoImage(file='pictures/red_button.gif')
+        img = PhotoImage(file=src_path('pictures/red_button.gif'))
         record_button = Label(self, image=img, bd=0)
         record_button.image = img
         record_button.place(x=700, y=0)
@@ -370,7 +372,7 @@ class Piano(Frame):
         record_button.bind('<Button-1>', record_on_off)
 
         # This group of lines creates the play Label.
-        img = PhotoImage(file='pictures/green_button.gif')
+        img = PhotoImage(file=src_path('pictures/green_button.gif'))
         play_button = Label(self, image=img, bd=0)
         play_button.image = img
         play_button.place(x=700, y=50)

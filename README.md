@@ -4,12 +4,21 @@
 
 ### [👉 Full Project Description 👈](https://jessekuntz.github.io/python-piano.html)
 
-## Running Things
+## Setup (macOS)
 
-1. `cd src`
-2. `pip3 install simpleaudio`
-3. `python3 piano.py`
+1. Install [Homebrew](https://brew.sh) if you don't have it.
+2. Install Python 3 and the Tk UI library:
+   ```bash
+   brew install python@3.13
+   brew install python-tk@3.13
+   ```
 
-## Versioning Notes
+No other dependencies — audio playback uses macOS's built-in `afplay`.
 
-This used to work in both Python 2 AND 3, but now, the `simpleaudio` module seems to only be supported for Python 3.
+## Running
+
+From the project root:
+
+```bash
+./run.sh
+```
